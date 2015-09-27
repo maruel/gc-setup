@@ -1,0 +1,12 @@
+#!/bin/bash
+# Copyright 2015 Marc-Antoine Ruel. All rights reserved.
+# Use of this source code is governed under the Apache License, Version 2.0
+# that can be found in the LICENSE file.
+
+# Prints out the VM external IP.
+
+set -eu
+
+VM_NAME="$1"
+
+gcloud compute instances describe "$VM_NAME" | grep natIP | sed -e 's/.*: //'
