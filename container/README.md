@@ -1,5 +1,5 @@
-Container
-=========
+Container on GKE
+================
 
 Scripts to help bootstrapping VMs on [Google Container
 Engine (GKE)](http://cloud.google.com/container-engine/) to run a self-updating

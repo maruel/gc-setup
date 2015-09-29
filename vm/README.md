@@ -1,5 +1,5 @@
-VM
-==
+VM on GCE
+=========
 
 Scripts to help bootstrapping VMs on [Google Compute
 Engine (GCE)](http://cloud.google.com/compute) to run a self-updating
