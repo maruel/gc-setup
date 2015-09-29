@@ -8,17 +8,16 @@ webserver:
   - [make_startup](make_startup) generates customized startup
     [script](https://cloud.google.com/compute/docs/startupscript). This
     simplifies quickly deploying from vanilla stock image:
-    - Go
-      [facebookgo/grace/gracehttp](https://github.com/facebookgo/grace/gracehttp)
+    - Golang [facebookgo/grace](https://github.com/facebookgo/grace)
       based service transparent zero-downtime service restart via [Github
       webhooks](https://developer.github.com/webhooks/) using
-      [hookserve](https://github.com/phayes/hookserve).
+      [phayes/hookserve](https://github.com/phayes/hookserve).
     - Google [Domains Dynamic
       DNS](https://support.google.com/domains/answer/6147083); hostname updated
       on boot.
     - Google [Cloud Logging](https://cloud.google.com/logging/); streams logs to
       your Cloud console.
-    - Really simple to use, doesn't require a CI; it doesn't use a docker image.
+    - Really simple to use, doesn't require a CI, doesn't use a docker image.
       Just `git push` and your server is immediately rebuilt and restarted.
   - [create_vm](create_vm.md) easily create a VM with the right ports opened and
     using the startup script.
