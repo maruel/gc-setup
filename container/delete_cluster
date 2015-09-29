@@ -3,11 +3,13 @@
 # Use of this source code is governed under the Apache License, Version 2.0
 # that can be found in the LICENSE file.
 
+# Deletes the cluster.
+
 set -eu
 
-VM_NAME="$1"
+CLUSTER_NAME="$1"
 
-# It's a bit faster to hard reset first, otherwise delete initiates an ordered
-# shutdown.
-gcloud compute instances reset "$VM_NAME"
-gcloud compute instances delete "$VM_NAME"
+gcloud container clusters delete "$CLUSTER_NAME"
+
+echo 'Clusters remaining:'
+gcloud container clusters list

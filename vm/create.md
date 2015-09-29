@@ -7,7 +7,7 @@ to get a VM on Google Compute Engine up and running and well configured.
 First, run `./make_script` to generate a `startup.sh`. Use `./make_script
 --help` for more details.
 
-Here's roughly what `create_vm` does for you:
+Here's roughly what `create` does for you:
 
   1. Create the project via the [Google Developers
      Console](https://console.developers.google.com); while I use [Google

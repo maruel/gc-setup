@@ -1,0 +1,14 @@
+#!/bin/bash
+# Copyright 2015 Marc-Antoine Ruel. All rights reserved.
+# Use of this source code is governed under the Apache License, Version 2.0
+# that can be found in the LICENSE file.
+
+# Resizes the number of nodes used by a POD (application). Should be less than
+# the number of VMs in the cluster.
+
+set -eu
+
+POD_NAME="$1"
+REPLICAS="$2"
+
+kubectl scale rc "$POD_NAME" --replicas=$REPLICAS

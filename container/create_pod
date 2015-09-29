@@ -1,0 +1,18 @@
+#!/bin/bash
+# Copyright 2015 Marc-Antoine Ruel. All rights reserved.
+# Use of this source code is governed under the Apache License, Version 2.0
+# that can be found in the LICENSE file.
+
+# Create a POD (application, logical group of one or more containers) to run on
+# a cluster.
+
+set -eu
+
+POD_NAME="$1"
+
+# TODO(maruel): For multiple containers, must use a yaml/json file.
+kubectl run $POD_NAME --image=busybox --port=22 --replicas=1
+#kubectl expose rc $POD_NAME --port=22 --create-external-load-balancer=true
+#kubectl get services $POD_NAME
+
+kubectl describe pods $POD_NAME

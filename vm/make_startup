@@ -3,7 +3,7 @@
 # Use of this source code is governed under the Apache License, Version 2.0
 # that can be found in the LICENSE file.
 
-"""Creates a new startup.sh for use with create_vm for GCE VMs.
+"""Creates a new startup.sh for use with create for GCE VMs.
 
 - If you are unhappy with the defaults, edit this script.
 - The startup script must be less than 32Kib.

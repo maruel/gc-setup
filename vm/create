@@ -1,0 +1,55 @@
+#!/bin/bash
+# Copyright 2015 Marc-Antoine Ruel. All rights reserved.
+# Use of this source code is governed under the Apache License, Version 2.0
+# that can be found in the LICENSE file.
+
+# Create a VM.
+
+set -eu
+
+THIS_DIR="$(dirname $0)"
+
+VM_NAME="$1"
+
+# - https://cloud.google.com/compute/docs/machine-types
+# - VM ubuntu-14-04 starts with 486Mib of RAM used.
+# 1/8 core; 0.6GB RAM; 0.008$/h
+#VM_TYPE=f1-micro
+# 1/2 core; 1.7GB RAM; 0.027$/h
+#VM_TYPE=g1-small
+# 1 core; 3.75GB RAM; 0.05$/h
+VM_TYPE=n1-standard-1
+
+# Disk:
+# - VM disk is 4¢/GB/mo. Read & write are free.
+# - Google Cloud Storage Standard is 2.6¢/GB/mo
+#   Nearline is 1¢/GB/mo but 1¢/GB extra to read back
+#   https://cloud.google.com/storage/docs/nearline
+#   https://cloud.google.com/storage/pricing#storage-pricing
+#
+# Reading from Cloud Storage or a VM:
+#   Read back is 12¢/GB (!) for network egress.
+#   EC2 is 9¢/GB; https://aws.amazon.com/ec2/pricing/;
+#   https://aws.amazon.com/cloudfront/pricing/ is 8.5¢/GB
+VM_DISK_SIZE=10GB
+
+
+if [ ! -f startup.sh ]; then
+  echo "Please run ./make_startup first."
+  exit 1
+fi
+
+# gcloud compute instances create --help
+gcloud compute instances create "$VM_NAME" \
+  --boot-disk-size "$VM_DISK_SIZE" \
+  --metadata-from-file "startup-script=startup.sh" \
+  --machine-type "$VM_TYPE" \
+  --image ubuntu-14-04 \
+  --tags allow-http,allow-https,allow-tcp9000
+
+gcloud compute instances start "$VM_NAME"
+
+# Clear up any known host ssh key.
+VM_IP="$(${THIS_DIR}/get_ip $VM_NAME)"
+ssh-keygen -f "$HOME/.ssh/known_hosts" -R $VM_IP &>/dev/null
+echo "ssh $VM_IP"

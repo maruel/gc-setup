@@ -1,0 +1,15 @@
+#!/bin/bash
+# Copyright 2015 Marc-Antoine Ruel. All rights reserved.
+# Use of this source code is governed under the Apache License, Version 2.0
+# that can be found in the LICENSE file.
+
+# Forcibly delete a VM.
+
+set -eu
+
+VM_NAME="$1"
+
+# It's a bit faster to hard reset first, otherwise delete initiates an ordered
+# shutdown.
+gcloud compute instances reset "$VM_NAME"
+gcloud compute instances delete "$VM_NAME"
