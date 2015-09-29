@@ -1,5 +1,5 @@
-gce-setup
-=========
+gc-setup
+========
 
 Scripts to help bootstrapping either VMs or Containers on [Google
 Cloud](http://cloud.google.com) to run a [Go](https://golang.org) webserver.
