@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # Copyright 2015 Marc-Antoine Ruel. All rights reserved.
 # Use of this source code is governed under the Apache License, Version 2.0
 # that can be found in the LICENSE file.
@@ -29,9 +28,7 @@ import sys
 
 # pylint: disable=line-too-long
 
-
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-
 
 # - git: go get github.com/foo/bar
 # - ifstat: print_stats

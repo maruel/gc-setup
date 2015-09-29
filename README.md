@@ -1,7 +1,8 @@
 gce-setup
 =========
 
-Scripts to help bootstrapping VMs on Google Compute Engine (GCE) to run a Go
+Scripts to help bootstrapping VMs on [Google Compute Engine
+(GCE)](http://cloud.google.com/compute) to run a [Go](https://golang.org)
 webserver:
 
   - [make_startup](make_startup) generates customized startup
@@ -12,9 +13,13 @@ webserver:
       based service transparent zero-downtime service restart via [Github
       webhooks](https://developer.github.com/webhooks/) using
       [hookserve](https://github.com/phayes/hookserve).
-    - Google Domains DynDNS; hostname updated on boot.
-    - Google Cloud Logging; streams logs to your Cloud console.
+    - Google [Domains Dynamic
+      DNS](https://support.google.com/domains/answer/6147083); hostname updated
+      on boot.
+    - Google [Cloud Logging](https://cloud.google.com/logging/); streams logs to
+      your Cloud console.
     - Really simple to use, doesn't require a CI; it doesn't use a docker image.
+      Just `git push` and your server is immediately rebuilt and restarted.
   - [create_vm](create_vm.md) easily create a VM with the right ports opened and
     using the startup script.
 
@@ -23,7 +28,7 @@ Usage
 -----
 
 First, create a startup.sh script, then create the VM to use it. Here's an
-example how to start a godoc.org clone:
+example how to start a [godoc.org](https://godoc.org) clone:
 
     ./make_startup --help
 
@@ -41,12 +46,15 @@ example how to start a godoc.org clone:
 Project setup
 -------------
 
+### 1. Install and setup `gcloud`
+
 Install `gcloud` and restart your shell:
 
     curl https://sdk.cloud.google.com | bash
 
-Make sure you created a project and enabled billing (with free trial) at
-https://console.developers.google.com then initialize `gcloud`:
+Make sure you [created a project and enabled billing (with free
+trial)](https://cloud.google.com/compute/docs/networking) then initialize
+`gcloud`:
 
     gcloud init --console-only
     gcloud config set compute/zone us-central1-f
@@ -54,20 +62,29 @@ https://console.developers.google.com then initialize `gcloud`:
     gcloud config list
 
 
-Setup your ssh key, this way you can ssh natively to your instances from
-any workstation with your ssh key configured. More details at
-https://cloud.google.com/compute/docs/instances/managing-ssh-keys and
-https://wiki.ubuntu.com/GoogleComputeEngineSSHKeys
+### 2. Open ports in the firewall
+
+Setup the [firewall](https://cloud.google.com/compute/docs/networking) as by
+default almost all ports are closed.
+
+    gcloud compute firewall-rules create allow-http --description "Incoming http allowed" --allow tcp:80
+    gcloud compute firewall-rules create allow-https --description "Incoming https allowed" --allow tcp:443
+    gcloud compute firewall-rules create allow-tcp9000 --description "Incoming tcp:9000 allowed" --allow tcp:9000
+
+    gcloud compute firewall-rules list
+    gcloud compute networks list
+
+
+### 3. Push your SSH key
+
+_(Optional, only if you have a ssh key)_
+
+Setup [your ssh key to your Google Cloud
+project](https://cloud.google.com/compute/docs/networking), this way you can ssh
+natively to your instances from any workstation with your ssh key configured.
+[Doc at Canonical](https://wiki.ubuntu.com/GoogleComputeEngineSSHKeys).
 
     echo -n "$USER " > key.pub
     cat ~/.ssh/id_rsa.pub >> key.pub
     gcloud compute project-info add-metadata --metadata-from-file sshKeys=key.pub
     rm key.pub
-
-Setup the firewall; as by default almost all ports are closed. https://cloud.google.com/compute/docs/networking
-
-    gcloud compute firewall-rules create allow-http --description "Incoming http allowed" --allow tcp:80
-    gcloud compute firewall-rules create allow-https --description "Incoming https allowed" --allow tcp:443
-    gcloud compute firewall-rules create allow-tcp9000 --description "Incoming tcp:9000 allowed" --allow tcp:9000
-    gcloud compute firewall-rules list
-    gcloud compute networks list
